@@ -1,0 +1,5 @@
+Sally 333-333-333 Finance H 15.75 0.0
+Arnie 222-222-222 Personnel S 52000.0
+Bobby 111-111-111 Appliances C 13 800.0 0.0 10.0
+Timmy 444-444-444 Marketing H 20.0 0.0
+Cindy 777-777-777 Computers C 23 500.0 0.0 12.0
