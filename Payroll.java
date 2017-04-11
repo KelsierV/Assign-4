@@ -366,14 +366,14 @@ public class Payroll extends Employee
                         System.out.println("Invalid input.");                    
                     }
                 }
-                //System.out.println("Enter hours worked this week (max 70): ");
+
                 while (check == false)
                 {
                     try {
                         scan = new Scanner (System.in);
                         System.out.println("Enter hours worked this week (max 70): ");
                         hoursW = scan.nextDouble();
-                        if (hoursW > 70)
+                        if (hoursW > 70 || hoursW < 0)
                         {
                             System.out.println("Invalid amount of hours worked.");
                             hoursW = 0;
@@ -460,7 +460,7 @@ public class Payroll extends Employee
                     }
                     catch (InputMismatchException a)
                     {
-                        System.out.println("Invalid input. Returning to beginning prompt.");                    
+                        System.out.println("Invalid input.");                    
                     }
                 }
             }
