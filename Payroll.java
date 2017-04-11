@@ -73,13 +73,27 @@ public class Payroll extends Employee
                         hoursWorked = Double.parseDouble(empInfo[5]);
                         if (payRate < minWage)
                         {
-                            System.out.print("Invalid pay rate on ");
-                            throw new InvalidAmountException();
+                            System.out.print("Line " + line + ": Hourly employee " + name + " cannot work less than minimum wage. ");
+                            while (payRate < minWage)
+                            {
+                                System.out.println("Input correct amount: ");
+                                payRate = input.nextDouble();
+                            }                            
+                        }
+                        else if (hoursWorked > 70)
+                        {
+                            System.out.print("Line " + line + ": Hourly employee " + name + " cannot work more than 70 hours. ");
+                            while (hoursWorked > 70)
+                            {
+                                System.out.println("Input correct amount (0 to 70): ");
+                                hoursWorked = input.nextDouble();
+                            }                            
                         }
                         else if (hoursWorked < 0)
                         {
-                            System.out.print("Invalid hours worked on ");
-                            throw new InvalidAmountException();
+                            System.out.print("Line " + line + ": Hourly employee " + name + " cannot work less than 0 hours. ");
+                            hoursWorked = correctAnswer(hoursWorked);
+
                         }
                         emp1 = new Hourly(name, employeeNum, department, payRate, hoursWorked);
                         list.add(emp1);
@@ -101,6 +115,15 @@ public class Payroll extends Employee
                     if (empInfo.length == 5)
                     {
                         yearlySalary = Double.parseDouble(empInfo[4]);
+                        if ((yearlySalary < 24000) || (yearlySalary > 480000))
+                        {
+                            System.out.print("Line " + line + ": Salary employee " + name + " cannot have a yearly salary of $" + yearlySalary + " . ");
+                            while ((yearlySalary < 24000) || (yearlySalary > 480000))
+                            {
+                                System.out.println("Input correct amount ($24000 to $480000): ");
+                                yearlySalary = input.nextDouble();
+                            }
+                        }
                         emp1 = new Salary(name, employeeNum, department, yearlySalary);
                         list.add(emp1);
 
@@ -121,10 +144,43 @@ public class Payroll extends Employee
                     if (empInfo.length == 9)
                     {
                         weeksWorked = Integer.parseInt(empInfo[4]);
+                        if (weeksWorked < 0)
+                        {
+                            System.out.print("Line " + line + ": Commission employee " + name + " cannot have worked less than 0 weeks. ");
+                            weeksWorked = (int)correctAnswer(weeksWorked);
+                        }
                         weeklySalary = Double.parseDouble(empInfo[5]);
+                        if (weeklySalary < 400)
+                        {
+                            System.out.print("Line " + line + ": Commission employee " + name + " cannot have a weekly salary of $" + weeklySalary + ". ");
+                            while (weeklySalary < 400)
+                            {
+                                System.out.println("Input correct amount (greater or equal to $400): ");
+                                weeklySalary = input.nextDouble();
+                            }
+                        }
                         weeklySales = Double.parseDouble(empInfo[6]);
+                        if (weeklySales < 0)
+                        {
+                            System.out.print("Line " + line + ": Commission employee " + name + " cannot have negative weekly sales. ");
+                            weeklySales = correctAnswer(weeklySales);
+                        }
                         yearlySales = Double.parseDouble(empInfo[7]);
+                        if (yearlySales < 0)
+                        {
+                            System.out.print("Line " + line + ": Commission employee " + name + " cannot have negative yearly sales. ");
+                            yearlySales = correctAnswer(yearlySales);
+                        }
                         commission = Double.parseDouble(empInfo[8]);
+                        if (commission > 20)
+                        {
+                            System.out.print("Line " + line + ": Commission employee " + name + " cannot have a commission rate of " + commission + "%. ");
+                            while ((commission > 20) || (commission < 0))
+                            {
+                                System.out.println("Input correct amount (less than 20%): ");
+                                commission = input.nextDouble();
+                            }
+                        }
                         emp1 = new Commission(name, employeeNum, department, weeksWorked, weeklySalary, weeklySales, yearlySales, commission);
                         list.add(emp1);
 
@@ -148,15 +204,26 @@ public class Payroll extends Employee
                 }              
             }
             catch (NoSuchElementException a) {
-                System.out.println("Error found in file, was ignored.");
+                System.out.println("Invalid input. Proceeding to next line.");
             }  
-            catch (InvalidAmountException b){
-                System.out.print("Line " + line + " contains invalid numbers. Information will not be processed");
-            }
+            catch (NumberFormatException c) {
+                System.out.println("Line " + line + ": is an invalid transaction. There is erroneous data.");
+            }  
             line++;
         }
         numPeople = i;
         return valid;
+    }
+
+    private double correctAnswer(double num)
+    {
+        Scanner input = new Scanner (System.in);
+        while (num < 0)
+        {
+            System.out.println("Input correct amount: ");
+            num = input.nextDouble();
+        }
+        return num;
     }
 
     /**
