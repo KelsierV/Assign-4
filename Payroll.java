@@ -24,7 +24,6 @@ public class Payroll extends Employee
         String employeeNum;
         String department;
         char type;
-        char placeHold;
         double payRate;
         double hoursWorked;
         double yearlySalary;
@@ -36,8 +35,6 @@ public class Payroll extends Employee
         int i = 0;
         int line = 1;
         boolean valid = false;
-
-        Employee emp1 = new Employee();
 
         Scanner input = new Scanner (System.in);
 
@@ -56,21 +53,37 @@ public class Payroll extends Employee
 
         while (file.hasNextLine()) {
             try {
-                name = file.next();
-                employeeNum = file.next();
-                department = file.next();
-                placeHold = file.next().toUpperCase().charAt(0);
+                Employee emp1;
+                String empRaw = file.nextLine();
+                String[] empInfo = new String [9];
+                empInfo = empRaw.split(" ");
 
-                switch (placeHold)
+                name = empInfo[0];
+                employeeNum = empInfo[1];
+                department = empInfo[2];
+                type = empInfo[3].toUpperCase().charAt(0);
+
+                switch (type)
                 {
                     case 'H':
-                    payRate = file.nextDouble();
-                    hoursWorked = file.nextDouble();
-                    emp1 = new Hourly(name, employeeNum, department, payRate, hoursWorked);
-                    list.add(emp1);
+                    if (empInfo.length == 6)
+                    {
+                        payRate = Double.parseDouble(empInfo[4]);
+                        hoursWorked = Double.parseDouble(empInfo[5]);
+                        emp1 = new Hourly(name, employeeNum, department, payRate, hoursWorked);
+                        list.add(emp1);
 
-                    System.out.println("Line " + line + ": is a valid transaction. " + name + " (" + placeHold + ")" + " was added. ");
-                    i++;
+                        System.out.println("Line " + line + ": is a valid transaction. " + name + " (" + type + ")" + " was added. ");
+                        i++;
+                    }
+                    else if (empInfo.length < 6)
+                    {
+                        System.out.println("Line " + line + ": is an invalid transaction. Information is missing in file.");
+                    }
+                    else if (empInfo.length > 6)
+                    {
+                        System.out.println("Line " + line + ": is an invalid transaction. Extra information is in file.");
+                    }
                     break;
 
                     case 'S':
@@ -78,7 +91,7 @@ public class Payroll extends Employee
                     emp1 = new Salary(name, employeeNum, department, yearlySalary);
                     list.add(emp1);
 
-                    System.out.println("Line " + line + ": is a valid transaction. " + name + " (" + placeHold + ")" + " was added. ");
+                    System.out.println("Line " + line + ": is a valid transaction. " + name + " (" + type + ")" + " was added. ");
                     i++;
                     break;
 
@@ -91,7 +104,7 @@ public class Payroll extends Employee
                     emp1 = new Commission(name, employeeNum, department, weeksWorked, weeklySalary, weeklySales, yearlySales, commission);
                     list.add(emp1);
 
-                    System.out.println("Line " + line + ": is a valid transaction. " + name + " (" + placeHold + ")" + " was added. ");
+                    System.out.println("Line " + line + ": is a valid transaction. " + name + " (" + type + ")" + " was added. ");
                     i++;
                     break;
 
