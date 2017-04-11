@@ -36,6 +36,7 @@ public class Payroll extends Employee
         int i = 0;
         int line = 1;
         boolean valid = false;
+        int exit = 0;
 
         Scanner input = new Scanner (System.in);
 
@@ -48,7 +49,13 @@ public class Payroll extends Employee
                 valid = true;
             }
             catch (FileNotFoundException a) {
-                System.out.println("Invalid file name.");
+                exit++;
+                System.out.println("Invalid file name. " + exit + " of 3 tries attempted.");
+                if (exit == 3)
+                {
+                    System.out.println("System will now shut down due to repeated failures.");
+                    System.exit(0);
+                }
             }
         }
 
@@ -83,7 +90,7 @@ public class Payroll extends Employee
                         else if (hoursWorked > 70)
                         {
                             System.out.print("Line " + line + ": Hourly employee " + name + " cannot work more than 70 hours. ");
-                            while (hoursWorked > 70)
+                            while (hoursWorked > 70 || hoursWorked < 0)
                             {
                                 System.out.println("Input correct amount (0 to 70): ");
                                 hoursWorked = input.nextDouble();
@@ -212,6 +219,7 @@ public class Payroll extends Employee
             line++;
         }
         numPeople = i;
+        file.close();
         return valid;
     }
 
@@ -373,7 +381,7 @@ public class Payroll extends Employee
                         scan = new Scanner (System.in);
                         System.out.println("Enter hours worked this week (max 70): ");
                         hoursW = scan.nextDouble();
-                        if (hoursW > 70)
+                        if (hoursW > 70 || hoursW < 0)
                         {
                             System.out.println("Invalid amount of hours worked.");
                             hoursW = 0;
